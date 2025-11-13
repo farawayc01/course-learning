@@ -1,3 +1,5 @@
+import 'package:course_learning/core/helpers/snackbar_helper.dart';
+import 'package:course_learning/features/auth/controller/auth_controller.dart';
 import 'package:course_learning/features/auth/presentation/signup_screen.dart';
 import 'package:course_learning/features/home_screen/presentation/home_screen.dart';
 import 'package:course_learning/utils/app_colors.dart';
@@ -14,28 +16,47 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  // Di dalam class _LoginScreenState Anda
-  final TextEditingController _emailController = TextEditingController();
-  bool _isTextEmpty = true; // State untuk melacak apakah input kosong
+  final AuthController _authController = AuthController();
+
   @override
   void initState() {
     super.initState();
-    _emailController.addListener(_checkTextStatus);
+    _authController.onStateUpdated = () {
+      if (mounted) {
+        setState(() {});
+
+        if (_authController.message != null && !_authController.isLoading) {
+          final bool isSuccess = _authController.message!.contains('Berhasil');
+
+          showCustomSnackbar(
+            context,
+            message: _authController.message!,
+            isSuccess: isSuccess,
+            durationSeconds: 2,
+          );
+          if (isSuccess) {
+            Future.delayed(const Duration(milliseconds: 1500), () {
+              if (mounted) {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+              }
+            });
+          }
+          _authController.message = null;
+        }
+      }
+    };
   }
 
-  void _checkTextStatus() {
-    // Hanya setState jika status kosong/terisi benar-benar berubah
-    if (_isTextEmpty != _emailController.text.isEmpty) {
-      setState(() {
-        _isTextEmpty = _emailController.text.isEmpty;
-      });
+  void _submitLogin() {
+    if (_authController.formKey.currentState!.validate()) {
+      _authController.handleLogin();
     }
   }
 
   @override
   void dispose() {
-    _emailController.removeListener(_checkTextStatus);
-    _emailController.dispose();
     super.dispose();
   }
 
@@ -57,83 +78,111 @@ class _LoginScreenState extends State<LoginScreen> {
             stops: [0.0, 0.3, 1.0],
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Login Account",
-              style: AppStyles.headlineStyle.copyWith(
-                color: AppStyles.getAdaptiveTextColor(context),
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 10),
-            Text(
-              "Welcome Back to Account👋",
-              style: AppStyles.bodyTextStyle.copyWith(
-                color: AppColors.slateGray,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 50),
-            CustomTextField(
-              controller: _emailController,
-              label: "Email",
-              hint: "Email",
-            ),
-            SizedBox(height: 10),
-            CustomTextField(
-              controller: _emailController,
-              label: "Password",
-              hint: "Password",
-              isPassword: true,
-            ),
-            SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Forgot Password ?",
-                style: AppStyles.bodyTextStyle.copyWith(
-                  color: AppColors.primaryColor,
+        child: Form(
+          key: _authController.formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Login Account",
+                style: AppStyles.headlineStyle.copyWith(
+                  color: AppStyles.getAdaptiveTextColor(context),
                 ),
                 textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(height: 30),
-            buttonCustom("Login", () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const HomeScreen()),
-              );
-            }),
-            SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Don't have an account? ",
-                  style: AppStyles.bodyTextStyle,
-                  textAlign: TextAlign.center,
+              SizedBox(height: 10),
+              Text(
+                "Welcome Back to Account👋",
+                style: AppStyles.bodyTextStyle.copyWith(
+                  color: AppColors.slateGray,
                 ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const SignupScreen()),
-                    );
-                  },
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 50),
+              CustomTextField(
+                controller: _authController.emailController,
+                label: "Email",
+                hint: "Email",
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Email wajib diisi.';
+                  }
+
+                  if (!_authController.emailValidatorRegExp.hasMatch(value)) {
+                    return 'Format email tidak valid (misal: user@domain.com).';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+              CustomTextField(
+                controller: _authController.passwordController,
+                label: "Password",
+                hint: "Password",
+                isPassword: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Kata sandi wajib diisi.';
+                  }
+                  if (value.length < 8) {
+                    return 'Kata sandi minimal 8 karakter.';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: Align(
+                  alignment: Alignment.centerRight,
                   child: Text(
-                    "Signup",
+                    "Forgot Password ?",
                     style: AppStyles.bodyTextStyle.copyWith(
                       color: AppColors.primaryColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              SizedBox(height: 30),
+              buttonCustom("Login", () {
+                _submitLogin();
+              }),
+              SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Don't have an account? ",
+                    style: AppStyles.bodyTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SignupScreen()),
+                      );
+                    },
+                    child: Text(
+                      "Signup",
+                      style: AppStyles.bodyTextStyle.copyWith(
+                        color: AppColors.primaryColor,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

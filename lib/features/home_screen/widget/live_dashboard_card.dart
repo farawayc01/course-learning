@@ -92,17 +92,20 @@ class LiveDashboardCard extends StatelessWidget {
                 ),
                 textAlign: TextAlign.left,
               ),
-              Text(
-                nameCourse,
-                style: AppStyles.bodyTextStyle.copyWith(
-                  fontSize: 16,
-                  color: AppColors.lightText,
-                  overflow: TextOverflow.ellipsis,
+              SizedBox(
+                width: 250,
+                child: Text(
+                  nameCourse,
+                  style: AppStyles.bodyTextStyle.copyWith(
+                    fontSize: 16,
+                    color: AppColors.lightText,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 2,
+                  textAlign: TextAlign.left,
                 ),
-                maxLines: 2,
-                textAlign: TextAlign.left,
               ),
-              SizedBox(height: 20),
+              Spacer(),
               ParticipantActivityRow(
                 avatarPaths: dummyAvatars,
                 participantsCount: participantsCount,
@@ -110,9 +113,10 @@ class LiveDashboardCard extends StatelessWidget {
               ),
               SizedBox(height: 20),
               SizedBox(
-                width: 100,
+                width: 120,
                 child: buttonCustom(
-                  padding: EdgeInsets.all(1),
+                  padding: EdgeInsets.zero,
+                  radius: 5,
                   "Join Now",
                   () {},
                   color: Colors.amber,

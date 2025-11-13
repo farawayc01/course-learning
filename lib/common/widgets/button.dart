@@ -8,18 +8,20 @@ Widget buttonCustom(
   Color? color,
   Color? titleColor,
   EdgeInsetsGeometry? padding,
+  double? radius,
 }) {
-  return Container(
-    padding: padding ?? EdgeInsets.all(4),
+  return SizedBox(
     width: double.infinity,
-    decoration: BoxDecoration(
-      color: color ?? AppColors.primaryColor,
-      shape: BoxShape.rectangle,
-      borderRadius: BorderRadius.circular(8),
-    ),
-    child: IconButton(
+    child: ElevatedButton(
       onPressed: onTap,
-      icon: Text(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color ?? AppColors.primaryColor,
+        padding: padding ?? EdgeInsets.all(20),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius ?? 10), // Sesuaikan radius
+        ),
+      ),
+      child: Text(
         title,
         style: AppStyles.bodyTextStyle.copyWith(
           color: titleColor ?? AppColors.lightText,

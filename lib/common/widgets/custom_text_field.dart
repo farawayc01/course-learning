@@ -7,12 +7,16 @@ class CustomTextField extends StatefulWidget {
   final String label;
   final String hint;
   final bool isPassword;
+  final String? Function(String?)? validator;
+  final String? compareValue;
   const CustomTextField({
     super.key,
     required this.controller,
     required this.label,
     required this.hint,
     this.isPassword = false,
+    this.validator,
+    this.compareValue,
   });
 
   @override
@@ -43,17 +47,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   void dispose() {
-    // Hapus listener saat widget dibuang
     widget.controller.removeListener(_checkTextStatus);
-    // Jangan dispose controller di sini; itu tanggung jawab parent widget!
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80,
-      padding: EdgeInsets.all(15),
+      // height: 80,
+      padding: EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10),
+      // padding: EdgeInsets.all(15),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
         color: Colors.white.withValues(alpha: 0.9),
@@ -61,6 +64,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       child: TextFormField(
         controller: widget.controller,
         obscureText: _obscureText && widget.isPassword,
+        validator: widget.validator,
         decoration: InputDecoration(
           labelText: _isTextEmpty ? null : widget.label,
           hintText: _isTextEmpty ? widget.label : null,
@@ -73,18 +77,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           suffixIcon: widget.isPassword
               ? GestureDetector(
                   onTap: () {
-                    // KUNCI 3: Toggle state saat tombol diklik
                     setState(() {
                       _obscureText = !_obscureText;
                     });
                   },
                   child: Icon(
-                    // Mengganti ikon berdasarkan state _obscureText
                     _obscureText ? Icons.visibility_off : Icons.visibility,
                     color: Colors.grey.shade600,
                   ),
                 )
-              : null, // Jika bukan password, ikon dihilangkan
+              : null,
           floatingLabelBehavior: FloatingLabelBehavior.always,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(

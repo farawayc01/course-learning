@@ -1,13 +1,12 @@
 import 'package:course_learning/features/auth/presentation/login_screen.dart';
 import 'package:course_learning/features/splash_screen/controller/splash_screen_controller.dart';
-import 'package:course_learning/features/splash_screen/presentation/uji_coba.dart';
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:course_learning/utils/app_styles.dart';
-import 'package:course_learning/common/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Widget initialScreen;
+  const SplashScreen({super.key, required this.initialScreen});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -26,12 +25,11 @@ class _SplashScreenState extends State<SplashScreen> {
         setState(() {
           // Jika sudah selesai Onboarding, segera navigasi
           if (_controller.isLastPage) {
-            // Karena finishOnboarding memanggil onStateUpdated, kita cek di sini:
-            if (_controller.isLastPage) {
-              // Navigator.of(context).pushReplacement(
-              //   MaterialPageRoute(builder: (context) => const HomePage()),
-              // );
-            }
+            // if (_controller.isLastPage) {
+            //   // Navigator.of(context).pushReplacement(
+            //   //   MaterialPageRoute(builder: (context) => const LoginScreen()),
+            //   // );
+            // }
           }
         });
       }
@@ -108,45 +106,43 @@ class _SplashScreenState extends State<SplashScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Tombol
-                  // ElevatedButton(
-                  //   onPressed: _controller.goToNextPage,
-                  //   child: Text(_controller.isLastPage ? "Selesai" : "Lanjut"),
-                  // ),
-                  Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: AppColors.primaryColor,
-                        width: 1,
-                      ),
-                    ),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: IconButton(
-                        onPressed: _controller.goToNextPage,
-                        icon: Icon(
-                          Icons.arrow_forward,
-                          color: AppColors.lightBackground,
+                  _controller.isLastPage
+                      ? SizedBox()
+                      : Container(
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.primaryColor,
+                              width: 1,
+                            ),
+                          ),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              onPressed: _controller.goToNextPage,
+                              icon: Icon(
+                                Icons.arrow_forward,
+                                color: AppColors.lightBackground,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                   SizedBox(height: 20),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const LoginScreen()),
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => widget.initialScreen,
+                        ),
                       );
                     },
                     child: Text(
-                      "Skip",
+                      _controller.isLastPage ? "Next" : "Skip",
                       style: AppStyles.bodyTextStyle,
                       textAlign: TextAlign.center,
                     ),

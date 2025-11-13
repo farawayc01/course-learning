@@ -1,31 +1,151 @@
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:course_learning/common/widgets/card_course.dart';
+import 'package:course_learning/features/category_screen/presentation/courses_screen.dart';
+import 'package:course_learning/features/category_screen/widget/card_category.dart';
+import 'package:course_learning/features/home_screen/controller/course_list_controller.dart';
 import 'package:course_learning/features/home_screen/widget/greeting_search_dashboard.dart';
 import 'package:course_learning/features/home_screen/widget/live_dashboard_card.dart';
+import 'package:course_learning/features/home_screen/widget/row_see_more.dart';
 import 'package:flutter/material.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  final CourseListController courseListController = CourseListController();
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    courseListController.onStateUpdated = () {
+      if (mounted) {
+        setState(() {});
+      }
+    };
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final TextEditingController searchController = TextEditingController();
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
-        child: Column(
-          children: [
-            GreetingSearchDashboard(
-              controller: searchController,
-              imageUser: "assets/images/person-2.png",
-              nameUser: "Avin Hendrawan",
-              greetings: "Find your course and enjoy new arrive✨",
-            ),
-            SizedBox(height: 15),
-            LiveDashboardCard(
-              nameMentor: "Huberta Raj",
-              nameCourse: "Complete Wordpress Training for Beginners",
-              assetCourse: "assets/images/wb-1.png",
-            ),
-          ],
+    final liveCourses = courseListController.courseList
+        .where((c) => c.isLive)
+        .toList();
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+          child: Column(
+            children: [
+              GreetingSearchDashboard(
+                controller: searchController,
+                imageUser: "assets/images/person-2.png",
+                nameUser: "Avin Hendrawan",
+                greetings: "Find your course and enjoy new arrive✨",
+              ),
+              SizedBox(height: 15),
+              courseListController.isLoading
+                  ? SizedBox(
+                      height: 260,
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  : CarouselSlider.builder(
+                      itemCount: liveCourses.length,
+                      itemBuilder: (context, index, realIndex) {
+                        final course = liveCourses[index];
+                        return LiveDashboardCard(
+                          nameMentor: course.instructor,
+                          nameCourse: course.title,
+                          assetCourse: "assets/images/wb-1.png",
+                        );
+                      },
+                      options: CarouselOptions(
+                        height: 260,
+                        // aspectRatio: 16 / 9,
+                        viewportFraction: 1,
+                        initialPage: 0,
+                        enableInfiniteScroll: true,
+                        reverse: false,
+                        autoPlay: true,
+                        autoPlayInterval: const Duration(seconds: 4),
+                        autoPlayAnimationDuration: const Duration(
+                          milliseconds: 2000,
+                        ),
+                        autoPlayCurve: Curves.fastOutSlowIn,
+                        enlargeCenterPage: true,
+                        scrollDirection: Axis.horizontal,
+                      ),
+                    ),
+              SizedBox(height: 15),
+              rowSeeMore("Your Today Session", () {}),
+              SizedBox(height: 10),
+              courseListController.isLoading
+                  ? SizedBox(
+                      height: 250,
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  : SizedBox(
+                      height: 250,
+                      child: ListView.builder(
+                        shrinkWrap: false,
+                        itemCount: courseListController.courseList.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final course = courseListController.courseList[index];
+                          return cardCourse(
+                            course.imageAsset,
+                            course.title,
+                            course.imageAsset,
+                            course.instructor,
+                            course.rating,
+                            course.isPremium,
+                          );
+                        },
+                      ),
+                    ),
+              SizedBox(height: 10),
+              rowSeeMore("Categories", () {}),
+              SizedBox(height: 10),
+              courseListController.isLoading
+                  ? SizedBox(
+                      height: 250,
+                      child: Center(child: CircularProgressIndicator()),
+                    )
+                  : SizedBox(
+                      height: 250,
+                      child: ListView.builder(
+                        shrinkWrap: false,
+                        itemCount: courseListController.uniqueCategories.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final category =
+                              courseListController.uniqueCategories[index];
+                          final count = courseListController.courseList
+                              .where((course) => course.category == category)
+                              .length;
+                          return cardCategory(
+                            category,
+                            count.toString(),
+                            margin: 10,
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      CoursesScreen(category: category),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+            ],
+          ),
         ),
       ),
     );

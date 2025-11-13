@@ -10,8 +10,8 @@ class AppColors {
     245,
   ).withValues(alpha: 0.3); // Biru
 
-  // Warna Sekunder (Aksen kedua)
-  static const Color accentColor = Color(0xFFA080C7); // Oranye
+  static const Color accentColor = Color(0xFFA080C7);
+  // static const Color  = Color(0xFFD49EEB);
 
   static const Color transparentColor = Colors.transparent;
   static const Color likeColor = Colors.red;

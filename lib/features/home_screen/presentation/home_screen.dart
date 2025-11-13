@@ -1,5 +1,9 @@
+import 'package:course_learning/features/category_screen/presentation/category_screen.dart';
+import 'package:course_learning/features/my_course_screen/presentation/my_course_screen.dart';
 import 'package:course_learning/features/home_screen/presentation/dashboard_screen.dart';
 import 'package:course_learning/features/home_screen/widget/custom_navigation_bar.dart';
+import 'package:course_learning/features/inbox_screen/presentation/inbox_screen.dart';
+import 'package:course_learning/features/profile_screen/presentation/profile_screen.dart';
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:flutter/material.dart';
 
@@ -20,10 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _pages = [
     // Ganti dengan widget layar nyata Anda
     const DashboardScreen(),
-    const Center(child: Text("Halaman 2: Semua Kursus")),
-    const Center(child: Text("Halaman 3: Pesan")),
-    const Center(child: Text("Halaman 4: Sertifikat")),
-    const Center(child: Text("Halaman 5: Profil")),
+    const CategoryScreen(),
+    const InboxScreen(),
+    const MyCourseScreen(),
+    const ProfileScreen(),
   ];
 
   @override

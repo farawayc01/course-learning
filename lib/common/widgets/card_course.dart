@@ -1,6 +1,7 @@
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:course_learning/utils/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 Widget cardCourse(
   String imageCourse,
@@ -8,8 +9,9 @@ Widget cardCourse(
   String mentorPict,
   String mentorName,
   double courseStars,
-  bool isLiked,
-) {
+  bool isLiked, {
+  bool? isShimmer,
+}) {
   return Container(
     width: 200,
     // height: 130,
@@ -25,6 +27,7 @@ Widget cardCourse(
           children: [
             Container(
               height: 130,
+              width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 color: Colors.blue,
@@ -47,13 +50,15 @@ Widget cardCourse(
           ],
         ),
         SizedBox(height: 8),
-        Text(
-          courseName,
-          style: AppStyles.bodyTextStyle,
-          textAlign: TextAlign.left,
+        Expanded(
+          child: Text(
+            courseName,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppStyles.bodyTextStyle,
+            textAlign: TextAlign.left,
+          ),
         ),
-        // SizedBox(height: 8),
-        Spacer(),
         Row(
           children: [
             Container(
