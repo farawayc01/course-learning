@@ -13,18 +13,18 @@ class SplashScreenController {
 
   final List<Slide> slides = [
     Slide(
-      "Selamat Datang! Belajar Tanpa Batas.",
-      "Temukan ribuan kursus dari para ahli dan kembangkan keahlian Anda, kapan pun dan di mana pun.",
+      "Welcome! Learn Without Limits.",
+      "Discover thousands of courses from experts and develop your skills, anytime, anywhere.",
       'assets/images/splash-screen-1.png',
     ),
     Slide(
-      "Akses Materi Kapan Saja.",
-      "Unduh video, baca modul, dan kerjakan kuis secara offline. Belajar jadi fleksibel sesuai jadwal Anda.",
+      "Access Materials Anytime.",
+      "Download videos, read modules, and take quizzes offline. Learn flexibly according to your schedule.",
       'assets/images/splash-screen-2.png',
     ),
     Slide(
-      "Tingkatkan Kompetensi Anda.",
-      "Dapatkan sertifikat yang diakui dan pantau progres belajar Anda di setiap kursus hingga selesai.",
+      "Improve Your Competence.",
+      "Get recognized certificates and monitor your learning progress in each course until completion.",
       'assets/images/splash-screen-3.png',
     ),
   ];

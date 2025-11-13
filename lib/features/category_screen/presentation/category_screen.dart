@@ -30,7 +30,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
     return Padding(
       padding: EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+        // padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+        padding: EdgeInsets.only(bottom: 10, left: 20, right: 20, top: 50),
+
         child: Column(
           children: [
             Row(

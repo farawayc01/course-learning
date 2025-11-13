@@ -84,7 +84,7 @@ class _CoursesScreenState extends State<CoursesScreen> {
                             return cardCourseLong(
                               course.imageAsset,
                               course.title,
-                              "assets/images/person-4.png",
+                              course.instructorImage,
                               course.instructor,
                               course.rating,
                               course.isFavorite,

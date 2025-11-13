@@ -157,7 +157,7 @@ Widget cardCourseLong(
                             ? Icon(Icons.favorite, color: AppColors.likeColor)
                             : Icon(
                                 Icons.favorite_border,
-                                color: AppColors.lightText,
+                                color: AppColors.darkText,
                               ),
                       ],
                     ),

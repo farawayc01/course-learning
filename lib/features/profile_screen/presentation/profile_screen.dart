@@ -1,12 +1,39 @@
 import 'package:course_learning/common/widgets/button.dart';
+import 'package:course_learning/core/services/auth_services.dart';
+import 'package:course_learning/data/models/user_model.dart';
 import 'package:course_learning/features/auth/controller/auth_controller.dart';
 import 'package:course_learning/features/profile_screen/widget/menu_card_profile.dart';
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:course_learning/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  final AuthService authService = AuthService();
+
+  UserData? currentUser;
+
+  @override
+  void initState() {
+    getCurrentUser();
+
+    super.initState();
+  }
+
+  Future<void> getCurrentUser() async {
+    final user = await authService.getCurrentUser();
+    if (mounted) {
+      setState(() {
+        currentUser = user;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "Avin Hendrawan",
+                      currentUser?.fullname ?? "",
                       style: AppStyles.bodyTextStyle.copyWith(fontSize: 20),
                     ),
                   ],

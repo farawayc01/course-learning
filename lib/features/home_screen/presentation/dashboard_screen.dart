@@ -1,5 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:course_learning/common/widgets/card_course.dart';
+import 'package:course_learning/core/services/auth_services.dart';
+import 'package:course_learning/data/models/user_model.dart';
 import 'package:course_learning/features/category_screen/presentation/courses_screen.dart';
 import 'package:course_learning/features/category_screen/widget/card_category.dart';
 import 'package:course_learning/features/home_screen/controller/course_list_controller.dart';
@@ -18,15 +20,27 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   final CourseListController courseListController = CourseListController();
   final TextEditingController searchController = TextEditingController();
+  final AuthService authService = AuthService();
+  UserData? currentUser;
 
   @override
   void initState() {
     super.initState();
+    getCurrentUser();
     courseListController.onStateUpdated = () {
       if (mounted) {
         setState(() {});
       }
     };
+  }
+
+  Future<void> getCurrentUser() async {
+    final user = await authService.getCurrentUser();
+    if (mounted) {
+      setState(() {
+        currentUser = user;
+      });
+    }
   }
 
   @override
@@ -44,7 +58,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               GreetingSearchDashboard(
                 controller: searchController,
                 imageUser: "assets/images/person-2.png",
-                nameUser: "Avin Hendrawan",
+                nameUser: currentUser?.fullname ?? '',
                 greetings: "Find your course and enjoy new arrive✨",
               ),
               SizedBox(height: 15),
@@ -99,7 +113,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           return cardCourse(
                             course.imageAsset,
                             course.title,
-                            course.imageAsset,
+                            course.instructorImage,
                             course.instructor,
                             course.rating,
                             course.isPremium,

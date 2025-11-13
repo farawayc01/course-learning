@@ -32,10 +32,10 @@ class AuthController {
     final success = await _authService.registerUser(fullname, email, password);
     isLoading = false;
     if (success) {
-      message = 'Registrasi Berhasil! Silakan masuk.';
+      message = 'Registration Successfull! Please log in.';
       onStateUpdated?.call();
     } else {
-      message = 'Registrasi Gagal: Email sudah terdaftar.';
+      message = 'Registration Failed: Email already registered.';
       onStateUpdated?.call();
     }
   }
@@ -54,11 +54,11 @@ class AuthController {
     isLoading = false;
 
     if (success) {
-      message = 'Login Berhasil!';
+      message = 'Login Successfull!';
       onStateUpdated?.call();
       onLoginSuccess?.call();
     } else {
-      message = 'Login Gagal: Email atau kata sandi salah.';
+      message = 'Login Failed: Incorrect email or password';
       onStateUpdated?.call();
     }
   }

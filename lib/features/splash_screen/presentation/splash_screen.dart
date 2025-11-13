@@ -59,7 +59,8 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              flex: 7,
+              flex: 6,
+
               child: PageView.builder(
                 controller: _controller.pageController,
                 itemCount: _controller.slides.length,
@@ -91,66 +92,72 @@ class _SplashScreenState extends State<SplashScreen> {
                 },
               ),
             ),
+            SizedBox(height: 20),
             Expanded(
               flex: 2,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(
-                  _controller.slides.length,
-                  (index) => _buildDot(index),
+              child: SizedBox(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        _controller.slides.length,
+                        (index) => _buildDot(index),
+                      ),
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _controller.isLastPage
+                            ? SizedBox()
+                            : Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: AppColors.primaryColor,
+                                    width: 1,
+                                  ),
+                                ),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primaryColor,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: IconButton(
+                                    onPressed: _controller.goToNextPage,
+                                    icon: Icon(
+                                      Icons.arrow_forward,
+                                      color: AppColors.lightBackground,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                        SizedBox(height: 10),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => widget.initialScreen,
+                              ),
+                            );
+                          },
+                          child: Text(
+                            _controller.isLastPage ? "Next" : "Skip",
+                            style: AppStyles.bodyTextStyle,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(height: 15),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
-            SizedBox(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _controller.isLastPage
-                      ? SizedBox()
-                      : Container(
-                          padding: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: AppColors.primaryColor,
-                              width: 1,
-                            ),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: IconButton(
-                              onPressed: _controller.goToNextPage,
-                              icon: Icon(
-                                Icons.arrow_forward,
-                                color: AppColors.lightBackground,
-                              ),
-                            ),
-                          ),
-                        ),
-                  SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => widget.initialScreen,
-                        ),
-                      );
-                    },
-                    child: Text(
-                      _controller.isLastPage ? "Next" : "Skip",
-                      style: AppStyles.bodyTextStyle,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
           ],
         ),
       ),
@@ -164,13 +171,14 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Widget _buildSlide(Slide slide) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40.0),
+    return SizedBox(
+      // padding: const EdgeInsets.symmetric(horizontal: 40.0),
+      // margin: EdgeInsets.only(bottom: 50),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Image.asset(slide.imagePath),
-          SizedBox(height: 30),
+          Image.asset(slide.imagePath, width: 300, height: 300),
+          // SizedBox(height: 30),
           Text(
             slide.title,
             style: AppStyles.headlineStyle.copyWith(
@@ -183,7 +191,7 @@ class _SplashScreenState extends State<SplashScreen> {
             style: AppStyles.bodyTextStyle.copyWith(color: AppColors.slateGray),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 20),
+          // SizedBox(height: 20),
         ],
       ),
     );

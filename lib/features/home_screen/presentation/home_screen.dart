@@ -47,12 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    // Kunci: Pindah PageView tanpa animasi geser
-    _pageController.animateToPage(
-      index,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
+    // // Kunci: Pindah PageView tanpa animasi geser
+    // _pageController.animateToPage(
+    //   index,
+    //   duration: const Duration(milliseconds: 300),
+    //   curve: Curves.easeOut,
+    // );
   }
 
   @override
@@ -72,16 +72,28 @@ class _HomeScreenState extends State<HomeScreen> {
             stops: [0.0, 0.3, 1.0],
           ),
         ),
-        child: PageView(
-          controller: _pageController,
-          physics: const NeverScrollableScrollPhysics(),
-
-          onPageChanged: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            // Fade + slide kecil
+            return SlideTransition(
+              position:
+                  Tween<Offset>(
+                    begin: const Offset(0, 0), // geser dikit dari kanan
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                  ),
+              child: FadeTransition(opacity: animation, child: child),
+            );
           },
-          children: _pages,
+          child: IndexedStack(
+            key: ValueKey<int>(
+              _selectedIndex,
+            ), // penting agar AnimatedSwitcher tahu halaman berubah
+            index: _selectedIndex,
+            children: _pages,
+          ),
         ),
       ),
 
