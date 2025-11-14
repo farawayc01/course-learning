@@ -14,6 +14,7 @@ class AuthController {
   VoidCallback? onStateUpdated;
   VoidCallback? onLoginSuccess;
   bool isLoading = false;
+  bool _isDisposed = false;
   String? message; // Untuk menyimpan pesan error/sukses
 
   final TextEditingController fullNameController = TextEditingController();
@@ -22,10 +23,16 @@ class AuthController {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  void _notifySafely() {
+    if (!_isDisposed) {
+      onStateUpdated?.call();
+    }
+  }
+
   Future<void> handleRegister() async {
     isLoading = true;
     message = null;
-    onStateUpdated?.call();
+    _notifySafely();
     final String fullname = fullNameController.text;
     final String email = emailController.text;
     final String password = passwordController.text;
@@ -33,10 +40,10 @@ class AuthController {
     isLoading = false;
     if (success) {
       message = 'Registration Successfull! Please log in.';
-      onStateUpdated?.call();
+      _notifySafely();
     } else {
       message = 'Registration Failed: Email already registered.';
-      onStateUpdated?.call();
+      _notifySafely();
     }
   }
 
@@ -46,7 +53,7 @@ class AuthController {
 
     isLoading = true;
     message = null;
-    onStateUpdated?.call();
+    _notifySafely();
     // Panggil AuthService untuk mengecek kredensial
     final bool success = await _authService.loginUser(email, password);
 
@@ -55,11 +62,13 @@ class AuthController {
 
     if (success) {
       message = 'Login Successfull!';
-      onStateUpdated?.call();
-      onLoginSuccess?.call();
+      _notifySafely();
+      if (!_isDisposed) {
+        onLoginSuccess?.call();
+      }
     } else {
       message = 'Login Failed: Incorrect email or password';
-      onStateUpdated?.call();
+      _notifySafely();
     }
   }
 
@@ -78,6 +87,10 @@ class AuthController {
   }
 
   void dispose() {
+    _isDisposed = true;
+    onStateUpdated = null;
+    onLoginSuccess = null;
+
     fullNameController.dispose();
     emailController.dispose();
     passwordController.dispose();

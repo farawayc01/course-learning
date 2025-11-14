@@ -1,4 +1,5 @@
 import 'package:course_learning/common/widgets/card_course.dart';
+import 'package:course_learning/core/helpers/snackbar_helper.dart';
 import 'package:course_learning/features/home_screen/controller/course_list_controller.dart';
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:course_learning/utils/app_styles.dart';
@@ -23,6 +24,12 @@ class _CoursesScreenState extends State<CoursesScreen> {
         setState(() {});
       }
     };
+  }
+
+  @override
+  void dispose() {
+    courseListController.dispose(); // ← WAJIB
+    super.dispose();
   }
 
   @override
@@ -68,7 +75,16 @@ class _CoursesScreenState extends State<CoursesScreen> {
                       ),
                     ],
                   ),
-                  Icon(Icons.search, size: 25),
+                  GestureDetector(
+                    onTap: () {
+                      showCustomSnackbar(
+                        context,
+                        message: "Still Working on it",
+                        isSuccess: false,
+                      );
+                    },
+                    child: Icon(Icons.search, size: 25),
+                  ),
                 ],
               ),
               courseListController.isLoading

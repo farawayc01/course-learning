@@ -3,9 +3,9 @@ import 'package:course_learning/utils/app_styles.dart';
 import 'package:flutter/material.dart';
 
 Widget buttonCustom(
-  String title,
-  VoidCallback onTap, {
+  String title, {
   Color? color,
+  VoidCallback? onTap,
   Color? titleColor,
   EdgeInsetsGeometry? padding,
   double? radius,

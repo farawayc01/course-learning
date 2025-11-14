@@ -1,7 +1,6 @@
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:course_learning/utils/app_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 Widget cardCourse(
   String imageCourse,
@@ -10,6 +9,7 @@ Widget cardCourse(
   String mentorName,
   double courseStars,
   bool isLiked, {
+  VoidCallback? onTap,
   bool? isShimmer,
 }) {
   return Container(
@@ -42,9 +42,13 @@ Widget cardCourse(
               right: 0,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: isLiked
-                    ? Icon(Icons.favorite, color: AppColors.likeColor)
-                    : Icon(Icons.favorite_border, color: AppColors.lightText),
+                child: GestureDetector(
+                  onTap: onTap,
+                  child: Icon(
+                    isLiked ? Icons.favorite : Icons.favorite_border,
+                    color: isLiked ? AppColors.likeColor : AppColors.lightText,
+                  ),
+                ),
               ),
             ),
           ],

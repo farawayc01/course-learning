@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:course_learning/common/widgets/card_course.dart';
+import 'package:course_learning/core/helpers/snackbar_helper.dart';
 import 'package:course_learning/core/services/auth_services.dart';
 import 'package:course_learning/data/models/user_model.dart';
 import 'package:course_learning/features/category_screen/presentation/courses_screen.dart';
@@ -11,7 +12,8 @@ import 'package:course_learning/features/home_screen/widget/row_see_more.dart';
 import 'package:flutter/material.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({super.key});
+  final Function(int) onNavigate;
+  const DashboardScreen({super.key, required this.onNavigate});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -44,6 +46,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void dispose() {
+    searchController.dispose();
+    courseListController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final liveCourses = courseListController.courseList
         .where((c) => c.isLive)
@@ -60,6 +69,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 imageUser: "assets/images/person-2.png",
                 nameUser: currentUser?.fullname ?? '',
                 greetings: "Find your course and enjoy new arrive✨",
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
               ),
               SizedBox(height: 15),
               courseListController.isLoading
@@ -75,6 +91,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           nameMentor: course.instructor,
                           nameCourse: course.title,
                           assetCourse: "assets/images/wb-1.png",
+                          onTap: () {
+                            showCustomSnackbar(
+                              context,
+                              message: "Still Working on it",
+                              isSuccess: false,
+                            );
+                          },
                         );
                       },
                       options: CarouselOptions(
@@ -95,7 +118,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       ),
                     ),
               SizedBox(height: 15),
-              rowSeeMore("Your Today Session", () {}),
+              rowSeeMore("Your Today Session", () {
+                widget.onNavigate(3);
+              }),
               SizedBox(height: 10),
               courseListController.isLoading
                   ? SizedBox(
@@ -116,13 +141,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             course.instructorImage,
                             course.instructor,
                             course.rating,
-                            course.isPremium,
+                            course.isFavorite,
+                            onTap: () {
+                              showCustomSnackbar(
+                                context,
+                                message: course.isFavorite
+                                    ? "Example from Favorite Courses"
+                                    : "Examples of courses not yet in Favorites",
+                                isSuccess: course.isFavorite ? true : false,
+                              );
+                            },
                           );
                         },
                       ),
                     ),
               SizedBox(height: 10),
-              rowSeeMore("Categories", () {}),
+              rowSeeMore("Categories", () {
+                widget.onNavigate(1);
+              }),
               SizedBox(height: 10),
               courseListController.isLoading
                   ? SizedBox(

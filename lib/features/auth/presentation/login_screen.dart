@@ -158,9 +158,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   SizedBox(height: 30),
-                  buttonCustom("Login", () {
-                    _submitLogin();
-                  }),
+                  buttonCustom(
+                    "Login",
+                    onTap: () {
+                      _submitLogin();
+                    },
+                  ),
                   SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

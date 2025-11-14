@@ -172,7 +172,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     },
                   ),
                   SizedBox(height: 30),
-                  buttonCustom("Signup", _submitRegistration),
+                  buttonCustom("Signup", onTap: _submitRegistration),
                   SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

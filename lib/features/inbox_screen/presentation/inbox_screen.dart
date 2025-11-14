@@ -1,3 +1,4 @@
+import 'package:course_learning/core/helpers/snackbar_helper.dart';
 import 'package:course_learning/features/inbox_screen/widget/card_inbox.dart';
 import 'package:course_learning/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,16 @@ class InboxScreen extends StatelessWidget {
                   "Inbox",
                   style: AppStyles.bodyTextStyle.copyWith(fontSize: 30),
                 ),
-                Icon(Icons.search, size: 25),
+                GestureDetector(
+                  onTap: () {
+                    showCustomSnackbar(
+                      context,
+                      message: "Still Working on it",
+                      isSuccess: false,
+                    );
+                  },
+                  child: Icon(Icons.search, size: 25),
+                ),
               ],
             ),
             Expanded(
@@ -33,12 +43,21 @@ class InboxScreen extends StatelessWidget {
                   itemCount: 8,
                   scrollDirection: Axis.vertical,
                   itemBuilder: (context, index) {
-                    return cardInbox(
-                      "assets/images/person-${index + 1}.png",
-                      "Ivani - ${index + 1}",
-                      index + 1,
-                      "Hello",
-                      targetTime,
+                    return GestureDetector(
+                      onTap: () {
+                        showCustomSnackbar(
+                          context,
+                          message: "Still Working on it",
+                          isSuccess: false,
+                        );
+                      },
+                      child: cardInbox(
+                        "assets/images/person-${index + 1}.png",
+                        "Ivani - ${index + 1}",
+                        index + 1,
+                        "Hello",
+                        targetTime,
+                      ),
                     );
                   },
                 ),

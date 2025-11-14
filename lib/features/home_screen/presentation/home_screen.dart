@@ -20,20 +20,19 @@ class _HomeScreenState extends State<HomeScreen> {
   // 2. CONTROLLER: Untuk mengontrol PageView
   late PageController _pageController;
 
-  // 3. DAFTAR HALAMAN (CONTENT)
-  final List<Widget> _pages = [
-    // Ganti dengan widget layar nyata Anda
-    const DashboardScreen(),
-    const CategoryScreen(),
-    const InboxScreen(),
-    const MyCourseScreen(),
-    const ProfileScreen(),
-  ];
+  final List<Widget> _pages = [];
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(initialPage: _selectedIndex);
+    _pages.addAll([
+      DashboardScreen(onNavigate: _onItemTapped),
+      const CategoryScreen(),
+      const InboxScreen(),
+      const MyCourseScreen(),
+      const ProfileScreen(),
+    ]);
   }
 
   @override
@@ -47,12 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
-    // // Kunci: Pindah PageView tanpa animasi geser
-    // _pageController.animateToPage(
-    //   index,
-    //   duration: const Duration(milliseconds: 300),
-    //   curve: Curves.easeOut,
-    // );
   }
 
   @override

@@ -7,6 +7,7 @@ class CourseListController {
 
   List<CourseModel> courseList = [];
   bool isLoading = false;
+  bool _isDisposed = false;
 
   // ✅ Tambahan: kategori yang sedang dipilih
   String? selectedCategory;
@@ -17,12 +18,13 @@ class CourseListController {
 
   void loadCourses() {
     isLoading = true;
-    onStateUpdated?.call();
+    _notifySafely();
 
     Future.delayed(const Duration(seconds: 1), () {
+      if (_isDisposed) return;
       courseList = dummyCourseData;
       isLoading = false;
-      onStateUpdated?.call();
+      _notifySafely();
     });
   }
 
@@ -47,6 +49,17 @@ class CourseListController {
     } else {
       selectedCategory = category;
     }
-    onStateUpdated?.call();
+    _notifySafely();
+  }
+
+  void _notifySafely() {
+    if (!_isDisposed) {
+      onStateUpdated?.call();
+    }
+  }
+
+  void dispose() {
+    _isDisposed = true;
+    onStateUpdated = null;
   }
 }

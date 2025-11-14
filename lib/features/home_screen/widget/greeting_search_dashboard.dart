@@ -1,4 +1,5 @@
 import 'package:course_learning/common/widgets/custom_search_bar.dart';
+import 'package:course_learning/core/helpers/snackbar_helper.dart';
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:course_learning/utils/app_styles.dart';
 import 'package:flutter/material.dart';
@@ -8,12 +9,14 @@ class GreetingSearchDashboard extends StatelessWidget {
   final String imageUser;
   final String nameUser;
   final String greetings;
+  final VoidCallback? onTap;
   const GreetingSearchDashboard({
     super.key,
     required this.controller,
     required this.imageUser,
     required this.nameUser,
     required this.greetings,
+    this.onTap,
   });
 
   @override
@@ -66,11 +69,20 @@ class GreetingSearchDashboard extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(Icons.notifications),
+              GestureDetector(onTap: onTap, child: Icon(Icons.notifications)),
             ],
           ),
           SizedBox(height: 15),
-          CustomSearchBar(controller: controller),
+          CustomSearchBar(
+            controller: controller,
+            onSubmitted: (_) {
+              showCustomSnackbar(
+                context,
+                message: "Still Working on it",
+                isSuccess: false,
+              );
+            },
+          ),
         ],
       ),
     );

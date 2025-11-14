@@ -4,6 +4,7 @@ import 'package:course_learning/features/auth/presentation/login_screen.dart';
 import 'package:course_learning/features/home_screen/presentation/home_screen.dart';
 import 'package:course_learning/features/splash_screen/presentation/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +17,11 @@ void main() async {
   final Widget initialScreen = currentUser != null
       ? const HomeScreen()
       : const LoginScreen();
+
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   runApp(MyApp(initialScreen: initialScreen));
 }
 

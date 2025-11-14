@@ -1,4 +1,5 @@
 import 'package:course_learning/common/widgets/button.dart';
+import 'package:course_learning/core/helpers/snackbar_helper.dart';
 import 'package:course_learning/core/services/auth_services.dart';
 import 'package:course_learning/data/models/user_model.dart';
 import 'package:course_learning/features/auth/controller/auth_controller.dart';
@@ -60,7 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       padding: EdgeInsets.zero,
                       radius: 5,
                       "Sign Out",
-                      () => authController.handleLogout(context),
+                      onTap: () => authController.handleLogout(context),
                       color: AppColors.likeColor,
                       titleColor: AppColors.lightText,
                     ),
@@ -92,22 +93,100 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               SizedBox(height: 20),
 
-              MenuCardProfile(title: "My Profile", icon: Icons.person),
-              SizedBox(height: 10),
-              MenuCardProfile(title: "My Courses", icon: Icons.book_rounded),
-              SizedBox(height: 10),
-              MenuCardProfile(title: "My Payment", icon: Icons.credit_card),
-              SizedBox(height: 10),
-              MenuCardProfile(title: "My Wishlist", icon: Icons.favorite),
-              SizedBox(height: 10),
-              MenuCardProfile(title: "Change Password", icon: Icons.lock),
-              SizedBox(height: 10),
-              MenuCardProfile(
-                title: "Live Session",
-                icon: Icons.wifi_tethering,
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: MenuCardProfile(title: "My Profile", icon: Icons.person),
               ),
               SizedBox(height: 10),
-              MenuCardProfile(title: "Subscription Plan", icon: Icons.list_alt),
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: MenuCardProfile(
+                  title: "My Courses",
+                  icon: Icons.book_rounded,
+                ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: MenuCardProfile(
+                  title: "My Payment",
+                  icon: Icons.credit_card,
+                ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: MenuCardProfile(
+                  title: "My Wishlist",
+                  icon: Icons.favorite,
+                ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: MenuCardProfile(
+                  title: "Change Password",
+                  icon: Icons.lock,
+                ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: MenuCardProfile(
+                  title: "Live Session",
+                  icon: Icons.wifi_tethering,
+                ),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  showCustomSnackbar(
+                    context,
+                    message: "Still Working on it",
+                    isSuccess: false,
+                  );
+                },
+                child: MenuCardProfile(
+                  title: "Subscription Plan",
+                  icon: Icons.list_alt,
+                ),
+              ),
             ],
           ),
         ),

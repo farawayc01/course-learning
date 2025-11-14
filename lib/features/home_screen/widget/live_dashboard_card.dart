@@ -9,11 +9,13 @@ class LiveDashboardCard extends StatelessWidget {
   final String nameMentor;
   final String nameCourse;
   final String assetCourse;
+  final VoidCallback? onTap;
   const LiveDashboardCard({
     super.key,
     required this.nameMentor,
     required this.nameCourse,
     required this.assetCourse,
+    this.onTap,
   });
 
   @override
@@ -118,7 +120,7 @@ class LiveDashboardCard extends StatelessWidget {
                   padding: EdgeInsets.zero,
                   radius: 5,
                   "Join Now",
-                  () {},
+                  onTap: onTap,
                   color: Colors.amber,
                   titleColor: AppColors.primaryColor,
                 ),
