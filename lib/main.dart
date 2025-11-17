@@ -3,6 +3,7 @@ import 'package:course_learning/data/models/user_model.dart';
 import 'package:course_learning/features/auth/presentation/login_screen.dart';
 import 'package:course_learning/features/home_screen/presentation/home_screen.dart';
 import 'package:course_learning/features/splash_screen/presentation/splash_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

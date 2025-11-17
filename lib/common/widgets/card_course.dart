@@ -109,8 +109,9 @@ Widget cardCourseLong(
   String mentorName,
   double courseStars,
   bool isLiked,
-  bool isCrowned,
-) {
+  bool isCrowned, {
+  VoidCallback? onTap,
+}) {
   return Container(
     height: 130,
     // width: double.infinity,
@@ -157,12 +158,15 @@ Widget cardCourseLong(
                             ? Icon(Icons.emoji_events, color: Colors.amber)
                             : SizedBox.shrink(),
                         isCrowned ? SizedBox(width: 2) : SizedBox.shrink(),
-                        isLiked
-                            ? Icon(Icons.favorite, color: AppColors.likeColor)
-                            : Icon(
-                                Icons.favorite_border,
-                                color: AppColors.darkText,
-                              ),
+                        GestureDetector(
+                          onTap: onTap,
+                          child: Icon(
+                            isLiked ? Icons.favorite : Icons.favorite_border,
+                            color: isLiked
+                                ? AppColors.likeColor
+                                : AppColors.darkText,
+                          ),
+                        ),
                       ],
                     ),
                   ],

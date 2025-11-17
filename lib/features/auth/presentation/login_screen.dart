@@ -22,30 +22,29 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _authController.onStateUpdated = () {
-      if (mounted) {
-        setState(() {});
+      if (!mounted) return;
 
-        if (_authController.message != null && !_authController.isLoading) {
-          final bool isSuccess = _authController.message!.contains(
-            'Successfull',
-          );
-          showCustomSnackbar(
-            context,
-            message: _authController.message!,
-            isSuccess: isSuccess,
-            durationSeconds: 2,
-          );
-          if (isSuccess) {
-            Future.delayed(const Duration(milliseconds: 1500), () {
-              if (mounted) {
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                );
-              }
-            });
-          }
-          _authController.message = null;
+      if (_authController.message != null && !_authController.isLoading) {
+        final isSuccess = _authController.message!.contains('Successfull');
+
+        showCustomSnackbar(
+          context,
+          message: _authController.message!,
+          isSuccess: isSuccess,
+          durationSeconds: 2,
+        );
+
+        if (isSuccess) {
+          Future.delayed(const Duration(milliseconds: 1500), () {
+            if (mounted) {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+              );
+            }
+          });
         }
+
+        _authController.message = null;
       }
     };
   }
@@ -59,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     super.dispose();
+    _authController.dispose();
   }
 
   @override

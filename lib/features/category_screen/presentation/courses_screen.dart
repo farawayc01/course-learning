@@ -37,8 +37,8 @@ class _CoursesScreenState extends State<CoursesScreen> {
     final coursesByCategory = courseListController.courseList
         .where((course) => course.category == widget.category)
         .toList();
-    return Material(
-      child: Container(
+    return Scaffold(
+      body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -105,6 +105,15 @@ class _CoursesScreenState extends State<CoursesScreen> {
                               course.rating,
                               course.isFavorite,
                               course.isPremium,
+                              onTap: () {
+                                showCustomSnackbar(
+                                  context,
+                                  message: course.isFavorite
+                                      ? "Example from Favorite Courses"
+                                      : "Examples of courses not yet in Favorites",
+                                  isSuccess: course.isFavorite ? true : false,
+                                );
+                              },
                             );
                           },
                         ),

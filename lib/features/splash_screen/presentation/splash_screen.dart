@@ -1,4 +1,3 @@
-import 'package:course_learning/features/auth/presentation/login_screen.dart';
 import 'package:course_learning/features/splash_screen/controller/splash_screen_controller.dart';
 import 'package:course_learning/utils/app_colors.dart';
 import 'package:course_learning/utils/app_styles.dart';
@@ -20,19 +19,8 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     // 2. Pasang Callback Controller
     _controller.onStateUpdated = () {
-      // Ini adalah JANTUNG pembaruan UI
-      if (mounted) {
-        setState(() {
-          // Jika sudah selesai Onboarding, segera navigasi
-          if (_controller.isLastPage) {
-            // if (_controller.isLastPage) {
-            //   // Navigator.of(context).pushReplacement(
-            //   //   MaterialPageRoute(builder: (context) => const LoginScreen()),
-            //   // );
-            // }
-          }
-        });
-      }
+      if (!mounted) return;
+      setState(() {});
     };
   }
 
@@ -40,6 +28,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        width: double.infinity,
+        height: double.infinity,
         padding: EdgeInsets.all(15),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -55,58 +45,60 @@ class _SplashScreenState extends State<SplashScreen> {
             stops: [0.0, 0.3, 0.6, 0.7, 1.0],
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 6,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                // color: Colors.red,
+                // height: MediaQuery.of(context).size.height * 0.7,
+                height: 600,
+                child: PageView.builder(
+                  controller: _controller.pageController,
+                  itemCount: _controller.slides.length,
+                  onPageChanged: _controller.onPageChanged,
+                  itemBuilder: (context, index) {
+                    // return _buildSlide(_controller.slides[index]);
+                    return AnimatedBuilder(
+                      animation: _controller.pageController,
+                      builder: (context, child) {
+                        double value = 0;
+                        try {
+                          value = _controller.pageController.page! - index;
+                        } catch (e) {
+                          // Abaikan error jika pageController.page belum diinisialisasi
+                          // Terjadi di frame pertama.
+                        }
+                        value = value.clamp(-1.0, 1.0);
+                        value = (1 - (value.abs() * 0.5));
 
-              child: PageView.builder(
-                controller: _controller.pageController,
-                itemCount: _controller.slides.length,
-                onPageChanged: _controller.onPageChanged,
-                itemBuilder: (context, index) {
-                  // return _buildSlide(_controller.slides[index]);
-                  return AnimatedBuilder(
-                    animation: _controller.pageController,
-                    builder: (context, child) {
-                      double value = 0;
-                      try {
-                        value = _controller.pageController.page! - index;
-                      } catch (e) {
-                        // Abaikan error jika pageController.page belum diinisialisasi
-                        // Terjadi di frame pertama.
-                      }
-                      value = value.clamp(-1.0, 1.0);
-                      value = (1 - (value.abs() * 0.5));
-
-                      return Opacity(
-                        opacity: value,
-                        child: Transform.scale(
-                          scale: value,
-                          child: _buildSlide(_controller.slides[index]),
-                        ),
-                      );
-                    },
-                  );
-                },
+                        return Opacity(
+                          opacity: value,
+                          child: Transform.scale(
+                            scale: value,
+                            child: _buildSlide(_controller.slides[index]),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              flex: 2,
-              child: SizedBox(
+              SizedBox(height: 30),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  _controller.slides.length,
+                  (index) => _buildDot(index),
+                ),
+              ),
+
+              Container(
+                margin: EdgeInsets.only(top: 30),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(
-                        _controller.slides.length,
-                        (index) => _buildDot(index),
-                      ),
-                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -151,14 +143,13 @@ class _SplashScreenState extends State<SplashScreen> {
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        SizedBox(height: 15),
                       ],
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -172,6 +163,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Widget _buildSlide(Slide slide) {
     return SizedBox(
+      width: double.infinity,
       // padding: const EdgeInsets.symmetric(horizontal: 40.0),
       // margin: EdgeInsets.only(bottom: 50),
       child: Column(

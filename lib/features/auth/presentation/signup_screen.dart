@@ -21,29 +21,26 @@ class _SignupScreenState extends State<SignupScreen> {
   void initState() {
     super.initState();
     _authController.onStateUpdated = () {
-      if (mounted) {
-        setState(() {});
-        if (_authController.message != null && !_authController.isLoading) {
-          final bool isSuccess = _authController.message!.contains(
-            'Successfull',
-          );
-          showCustomSnackbar(
-            context,
-            message: _authController.message!,
-            isSuccess: isSuccess, // Cek apakah ini pesan sukses
-            durationSeconds: 3,
-          );
-          if (isSuccess) {
-            Future.delayed(const Duration(milliseconds: 1500), () {
-              if (mounted) {
-                // _authController.dispose();
-                Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
-                );
-              }
-            });
-            _authController.message = null;
-          }
+      if (!mounted) return;
+
+      if (_authController.message != null && !_authController.isLoading) {
+        final bool isSuccess = _authController.message!.contains('Successfull');
+        showCustomSnackbar(
+          context,
+          message: _authController.message!,
+          isSuccess: isSuccess, // Cek apakah ini pesan sukses
+          durationSeconds: 3,
+        );
+        if (isSuccess) {
+          Future.delayed(const Duration(milliseconds: 1500), () {
+            if (mounted) {
+              // _authController.dispose();
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
+            }
+          });
+          _authController.message = null;
         }
       }
     };
